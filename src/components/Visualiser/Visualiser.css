@@ -1,0 +1,66 @@
+.visualiser {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  justify-content: center;
+}
+
+.building {
+  background-color: #fafafa;
+  border: 1px solid black;
+  padding: 16px;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+}
+
+.floor {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.room {
+  width: 64px;
+  height: 64px;
+  position: relative;
+  background-color: #357ec7;
+}
+
+.portal {
+  background-color: black;
+  border-radius: 3px;
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 4px;
+  bottom: 4px;
+}
+
+.portal--l {
+  right: unset;
+  width: 6px;
+}
+
+.portal--r {
+  left: unset;
+  width: 6px;
+}
+
+.portal--b {
+  top: unset;
+  height: 6px;
+}
+
+.portal--start {
+  background-color: orange;
+}
+
+.portal--finish {
+  background-color: #03dd03;
+}
+
+.portal--highlighted {
+  background-color: red;
+  z-index: 1;
+}

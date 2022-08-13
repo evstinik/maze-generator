@@ -1,0 +1,23 @@
+.generator {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  margin-bottom: 32px;
+}
+
+.configuration {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.configuration__item {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.configuration__input {
+  width: 60px;
+}
