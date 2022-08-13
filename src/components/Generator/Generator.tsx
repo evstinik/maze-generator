@@ -5,11 +5,17 @@ import { Visualiser } from '../Visualiser'
 import './Generator.css'
 
 export interface Configuration {
+  buildings: number
+  floors: number
+  rooms: number
   correctPathLength: number
 }
 
 const DEFAULT_CONFIGURATION: Configuration = {
-  correctPathLength: 10,
+  buildings: 2,
+  floors: 5,
+  rooms: 3,
+  correctPathLength: 10
 }
 
 export function Generator() {
@@ -18,8 +24,10 @@ export function Generator() {
   const [graph, setGraph] = React.useState<Graph | null>(null)
 
   const generate = React.useCallback(() => {
-    setGraph(generateMaze())
-  }, [])
+    setGraph(
+      generateMaze(configuration.correctPathLength, configuration.buildings, configuration.floors, configuration.rooms)
+    )
+  }, [configuration])
 
   return (
     <>
@@ -34,6 +42,36 @@ export function Generator() {
               type='number'
               value={configuration.correctPathLength}
               onChange={({ target }) => setConfiguration((c) => ({ ...c, correctPathLength: Number(target.value) }))}
+            />
+          </label>
+
+          <label className='configuration__item'>
+            Buildings
+            <input
+              className='configuration__input'
+              type='number'
+              value={configuration.buildings}
+              onChange={({ target }) => setConfiguration((c) => ({ ...c, buildings: Number(target.value) }))}
+            />
+          </label>
+
+          <label className='configuration__item'>
+            Floors per building
+            <input
+              className='configuration__input'
+              type='number'
+              value={configuration.floors}
+              onChange={({ target }) => setConfiguration((c) => ({ ...c, floors: Number(target.value) }))}
+            />
+          </label>
+
+          <label className='configuration__item'>
+            Rooms per floor
+            <input
+              className='configuration__input'
+              type='number'
+              value={configuration.rooms}
+              onChange={({ target }) => setConfiguration((c) => ({ ...c, rooms: Number(target.value) }))}
             />
           </label>
         </div>

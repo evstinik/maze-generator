@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { Graph, Node, nodeId } from '../../algorithms'
+import { Graph, Node, nodeId, solveMaze } from '../../algorithms'
 import { buildingLetter, range } from '../../utils'
 
 import './Visualiser.css'
@@ -14,6 +14,12 @@ export function Visualiser(props: VisualiserProps) {
 
   const [hoveredNode, setHoveredNode] = React.useState<Node | null>(null)
 
+  const solution = React.useMemo(() => {
+    const solution = solveMaze(graph)
+    console.log(solution)
+    return solution
+  }, [graph])
+
   return (
     <div className='visualiser'>
       {range(graph.buildings).map((buildingIdx) => {
@@ -24,6 +30,7 @@ export function Visualiser(props: VisualiserProps) {
               <div className='floor' key={floor}>
                 {range(graph.roomsPerFloor).map((room) => (
                   <div className='room' key={room}>
+                    {solution.distances[`${building}${floor + 1}${room + 1}`]?.minDist}
                     {['L', 'B', 'R'].map((portal) => {
                       const node = graph.nodes.find((n) => {
                         return (
@@ -40,7 +47,7 @@ export function Visualiser(props: VisualiserProps) {
                           className={classNames(`portal portal--${portal.toLowerCase()}`, {
                             'portal--start': node?.specialConnection == 'withStart',
                             'portal--finish': node?.specialConnection == 'withFinish',
-                            'portal--highlighted': highlighted,
+                            'portal--highlighted': highlighted
                           })}
                         />
                       )
