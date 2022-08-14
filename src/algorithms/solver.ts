@@ -27,7 +27,7 @@ export function solveMaze(graph: Graph): SolverState {
   const queue: Node[] = [graph.start]
 
   while (queue.length > 0) {
-    const [node] = queue.splice(0) // pop
+    const [node] = queue.splice(0, 1) // pop
     const { graph, distances } = state
 
     const distanceHere = distances[roomId(node)].minDist

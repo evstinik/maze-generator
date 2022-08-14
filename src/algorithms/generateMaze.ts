@@ -142,11 +142,77 @@ export function generateMaze(successPathLength = 10, buildings = 2, floorsPerBui
 
     unpairedInSameRoom = Array.from(unpairedNodes).filter((n) => isInSameRoom(n, graph.start))
     p = selectRandomElement(unpairedInSameRoom)
+    unpairedNodes.delete(p)
     p.connectedTo = [currentPortal]
     currentPortal.connectedTo = [p]
     distanceToFinish += 1
     distancesToFinish[roomId(p)] = distanceToFinish
   })()
+
+  console.log(Object.keys(distancesToFinish).length)
+
+  // connect rest (wave algorithm)
+  ;(() => {
+    const queue: Node[] = []
+
+    // we start from unpaired nodes which has known distance to finish
+    for (const n of unpairedNodes) {
+      if (distancesToFinish[roomId(n)] !== undefined) {
+        queue.push(n)
+      }
+    }
+
+    while (queue.length > 0) {
+      // console.log('Queue size: ', queue.length)
+      const [n] = queue.splice(0, 1) // pop
+      const isStillUnpaired = unpairedNodes.delete(n)
+      if (!isStillUnpaired) {
+        continue
+      }
+
+      // we select such destinations, so that we do not make shorter path, than the winning one
+      const possibleDestinations = Array.from(unpairedNodes).filter((_n) => {
+        return (
+          _n.building != n.building &&
+          (distancesToFinish[roomId(_n)] === undefined ||
+            distancesToFinish[roomId(_n)] == distancesToFinish[roomId(n)] ||
+            (distancesToFinish[roomId(_n)] >= successPathLength && distancesToFinish[roomId(n)] >= successPathLength))
+        )
+      })
+      if (possibleDestinations.length == 0) {
+        // console.warn('It was impossible to connect node ', n.id)
+        continue
+      }
+      const destination = selectRandomElement(possibleDestinations)
+      unpairedNodes.delete(destination)
+
+      console.log(
+        `${n.id} (${distancesToFinish[roomId(n)]}) -> ${destination.id} (${distancesToFinish[roomId(destination)]})`
+      )
+      if (n.connectedTo.length > 0) {
+        console.warn(`${n.id} is already paired with ${n.connectedTo[0].id}. Cannot pair it with ${destination.id}`)
+      }
+      if (destination.connectedTo.length > 0) {
+        console.warn(
+          `${destination.id} is already paired with ${destination.connectedTo[0].id}. Cannot pair it with ${n.id}`
+        )
+      }
+      n.connectedTo = [destination]
+      destination.connectedTo = [n]
+
+      if (distancesToFinish[roomId(destination)] === undefined) {
+        distancesToFinish[roomId(destination)] = distancesToFinish[roomId(n)] + 1
+
+        queue.push(
+          ...Array.from(unpairedNodes).filter((n) => {
+            return isInSameRoom(n, destination)
+          })
+        )
+      }
+    }
+  })()
+
+  console.log('Unpaired left: ', unpairedNodes.size)
 
   return graph
 }

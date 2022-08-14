@@ -1,5 +1,24 @@
 .visualiser {
   display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.visualiser__options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.visualiser__options__option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+.visualiser__buildings {
+  display: flex;
   flex-direction: row;
   gap: 32px;
   justify-content: center;
@@ -25,6 +44,24 @@
   height: 64px;
   position: relative;
   background-color: #357ec7;
+  display: flex;
+  flex-direction: column;
+}
+
+.room__number {
+  font-size: 9px;
+  font-weight: 900;
+  color: white;
+}
+
+.room__step {
+  font-size: 16px;
+  font-weight: bold;
+  color: #164c38;
+}
+
+.room--highlighted {
+  background-color: #2d9c74;
 }
 
 .portal {
